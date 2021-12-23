@@ -1,5 +1,6 @@
-export const PORT = '5050'
-export const HOST = 'http://localhost'
+export const PORT = '5050';
+export const HOST = 'http://localhost';
+export const URL = `${ HOST }:${ PORT }`;
 
 export const SIGN_IN = 'Sign In';
 export const SIGN_UP = 'Sign Up';

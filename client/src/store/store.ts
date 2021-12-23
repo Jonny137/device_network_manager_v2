@@ -1,19 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import devices from './reducer';
+import devices from './reducers/devices';
+import username from './reducers/username';
 
 const reducer = {
-    devices,
+	username,
+	devices,
 };
 
 const preloadedState = {
-    devices: [],
+	username: '',
+	devices: [],
 };
 
 export const store = configureStore({
-    reducer,
-    devTools: process.env.NODE_ENV !== 'production',
-    preloadedState,
+	reducer,
+	devTools: process.env.NODE_ENV !== 'production',
+	preloadedState,
 });
 
 
