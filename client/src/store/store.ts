@@ -1,15 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import devices from './reducers/devices';
-import username from './reducers/username';
+import user from './reducers/user';
 
 const reducer = {
-	username,
+	user,
 	devices,
 };
 
 const preloadedState = {
-	username: '',
+	user: {
+		id: '',
+		username: '',
+	},
 	devices: [],
 };
 

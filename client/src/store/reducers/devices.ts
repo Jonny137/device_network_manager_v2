@@ -4,11 +4,12 @@ import { RootState } from '../store';
 // TODO: move to separate file
 export interface Device {
 	_id: string;
-	name: string,
-	type: string,
-	host: string,
-	status: string,
-	disc_time: number,
+	name: string;
+	type: string;
+	host: string;
+	status: string;
+	disc_time: number;
+	editing?: boolean;
 }
 
 const initialState: Device[] = [];

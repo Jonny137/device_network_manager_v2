@@ -3,7 +3,7 @@ import { useLocation, Navigate } from 'react-router-dom';
 
 import validateToken, { User } from '../utils/validateToken';
 import { useAppDispatch } from '../store/hooks';
-import { removeUsername, setUsername } from '../store/reducers/username';
+import { removeUser, setUser } from '../store/reducers/user';
 
 const PrivateRoute: FC<any> = ({ children }) => {
 	const location = useLocation();
@@ -15,7 +15,7 @@ const PrivateRoute: FC<any> = ({ children }) => {
 	useEffect(() => {
 		const checkToken = async () => {
 			const user: User = await validateToken();
-			dispatch(!!user ? setUsername(user.username) : removeUsername());
+			dispatch(!!user ? setUser(user) : removeUser());
 
 			setIsAuth(!!user);
 			setLoading(false);

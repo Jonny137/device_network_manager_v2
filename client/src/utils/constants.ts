@@ -10,9 +10,11 @@ export const SIGN_UP_LINK = `Don't have an account? Sign up`;
 
 export const SIGN_IN_ENDPOINT = '/user/login';
 export const SIGN_UP_ENDPOINT = '/user/register';
+export const CHANGE_USERNAME_ENDPOINT = '/user/username';
 
 export const SIGN_IN_REF = '/signin';
 export const SIGN_UP_REF = '/signup';
 export const HOME_REF = '/home';
+export const ACCOUNT_REF = '/account';
 
 export const ACCESS_TOKEN = 'access_token';
