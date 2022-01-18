@@ -16,8 +16,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { Device, editDevice, removeDevice, selectDevices, setDevices } from '../store/reducers/devices';
+import { editDevice, removeDevice, selectDevices, setDevices } from '../store/reducers/devices';
 import { ACCESS_TOKEN, URL } from '../utils/constants';
+import { Device } from '../store/state.interface';
 
 const DeviceTable: FC = () => {
 	const devices = useAppSelector(selectDevices);

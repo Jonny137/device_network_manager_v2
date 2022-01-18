@@ -1,7 +1,8 @@
 import { FC, memo, useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 
-import validateToken, { User } from '../utils/validateToken';
+import validateToken  from '../utils/validateToken';
+import { User } from '../store/state.interface';
 
 const AuthRoute: FC<any> = ({ children }) => {
 	const location = useLocation();

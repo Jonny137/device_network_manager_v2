@@ -1,11 +1,7 @@
 import axios from 'axios';
 
 import { ACCESS_TOKEN, URL } from './constants';
-
-export interface User {
-	id: string;
-	username: string;
-}
+import { User } from '../store/state.interface';
 
 export const validateToken = async (): Promise<User> => {
 	const token = localStorage.getItem(ACCESS_TOKEN);

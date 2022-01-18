@@ -11,7 +11,8 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 
 import { ACCESS_TOKEN, HOST, PORT } from '../utils/constants';
 import { useAppDispatch } from '../store/hooks';
-import { addDevice, Device } from '../store/reducers/devices';
+import { addDevice } from '../store/reducers/devices';
+import { Device } from '../store/state.interface';
 
 const DeviceHeader: FC = () => {
 	const dispatch = useAppDispatch();

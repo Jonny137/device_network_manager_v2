@@ -5,10 +5,11 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 
 import { ACCESS_TOKEN, HOST, PORT } from '../utils/constants';
 import { useAppDispatch } from '../store/hooks';
-import { Device, setDevices } from '../store/reducers/devices';
+import { setDevices } from '../store/reducers/devices';
 import DeviceTable from '../components/DeviceTable';
 import DeviceHeader from '../components/DeviceHeader';
 import Header from '../components/Header';
+import { Device } from '../store/state.interface';
 
 const Panel: FC = () => {
 	const dispatch = useAppDispatch();

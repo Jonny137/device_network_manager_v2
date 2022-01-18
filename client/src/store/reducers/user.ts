@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../store';
-import { User } from '../../utils/validateToken';
+import { User } from '../state.interface';
 
 const initialState: User = {
 	id: '',

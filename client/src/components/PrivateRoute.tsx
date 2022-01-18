@@ -1,9 +1,10 @@
 import { FC, memo, useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 
-import validateToken, { User } from '../utils/validateToken';
+import validateToken from '../utils/validateToken';
 import { useAppDispatch } from '../store/hooks';
 import { removeUser, setUser } from '../store/reducers/user';
+import { User } from '../store/state.interface';
 
 const PrivateRoute: FC<any> = ({ children }) => {
 	const location = useLocation();

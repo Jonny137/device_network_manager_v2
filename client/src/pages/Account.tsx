@@ -13,7 +13,7 @@ import { ACCESS_TOKEN, CHANGE_USERNAME_ENDPOINT, URL } from '../utils/constants'
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { selectUser, setUser } from '../store/reducers/user';
-import { User } from '../utils/validateToken';
+import { User } from '../store/state.interface';
 
 const Account: React.FC = () => {
 	const dispatch = useAppDispatch();
