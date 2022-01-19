@@ -1,27 +1,31 @@
 import axios from 'axios';
-import { ACCESS_TOKEN, HOST, PORT } from './constants';
 
-export const isTokenValid = async (): Promise<boolean> => {
-  const token = localStorage.getItem(ACCESS_TOKEN);
+import { ACCESS_TOKEN, URL } from './constants';
+import { User } from '../store/state.interface';
 
-  if (!token) {
-    return false;
-  }
+export const validateToken = async (): Promise<User> => {
+	const token = localStorage.getItem(ACCESS_TOKEN);
 
-  const headers = {
-    'Authorization': `Bearer ${token}`
-  }
+	if (!token) {
+		return null as unknown as User;
+	}
 
-  let checkValdity;
-  
-  try {
-    checkValdity = await axios.post(`${HOST}:${PORT}/user/verify`, null, { headers });
-  } catch (e) {
-    localStorage.removeItem(ACCESS_TOKEN);
-    return false;
-  }
+	const headers = {
+		'Authorization': `Bearer ${ token }`
+	}
 
-  return !!checkValdity.data.message;
+	let response;
+	let user: User;
+
+	try {
+		response = await axios.post(`${ URL }/user/verify`, null, { headers });
+		user = response.data.message;
+	} catch (e) {
+		localStorage.removeItem(ACCESS_TOKEN);
+		user = null as unknown as User;
+	}
+
+	return user;
 }
 
-export default isTokenValid;
+export default validateToken;
