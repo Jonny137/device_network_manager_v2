@@ -11,7 +11,10 @@ export const createAccount = async(req: Request, res: Response, next: NextFuncti
     try {
         const newUser: IUser | null = await userService.addUserAccount(req.body);
         sendResponse(res, newUser);
-    } catch(error) {
+    } catch(error: any) {
+        if (error.code === 11000) {
+            next(new HttpError(400, 'Duplicated username.'))
+        }
         logger.error('Error during adding user account: ', error);
         next(new HttpError());
     }
@@ -24,26 +27,24 @@ export const login = wrapAsync(async (req: Request, res: Response, next: NextFun
 
     if (!user) {
         logger.error('Error during login, finding user');
-        throw new HttpError(400, 'Invalid credentials.');
+        next(new HttpError(400, 'Invalid credentials.'));
     }
 
-    if (!(await user.validatePassword(credentials.password))) {
+    if (!(await user!.validatePassword(credentials.password))) {
         logger.error('Error during login, validating password');
-        throw new HttpError(400, 'Invalid credentials.');
+        next(new HttpError(400, 'Invalid credentials.'));
     }
 
     const token = sign(
         { 
-            userId: user.id,
-            username: user.username 
+            userId: user!.id,
+            username: user!.username 
         },
         process.env.JWT_SECRET as string,
         { expiresIn: '2h' }
     );
 
-    return res
-        .status(200)
-        .json({ message: token, status: 'OK' });
+    sendResponse(res, token);
 });
 
 
@@ -54,37 +55,34 @@ export const logout = async(req: Request, res: Response, next: NextFunction) => 
 
     if (!user) {
         logger.error('Error during lougout, invalid user');
-        throw new HttpError(400, 'Invalid user.');
+        next(new HttpError(400, 'Invalid user.'));
     }
 
-    return res
-        .status(200)
-        .json({ message: 'Successfully logged out', status: 'OK' });
+    sendResponse(res, 'Successfully logged out.')
 }
 
 export const changeUsername = wrapAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.userId;
     const newUsername = req.body.username;
-    let newUser: IUser | null;
+    let newUser: IUser | null = null;
 
     const user: IUser | null = await userService.getUserById(userId);
 
     if (!user) {
         logger.error('Error during changing username, invalid user', user);
-        throw new HttpError(400, 'Invalid user.');
+        next(new HttpError(400, 'Invalid user.'));
     }
     
     try {
-        newUser = await userService.changeUsername(user.id, newUsername);
+        newUser = await userService.changeUsername(user!.id, newUsername);
     } catch (error) {
-        throw new HttpError();
+        next(new HttpError());
     }
     
-
     sendResponse(res, newUser)
 });
 
-export const verifyToken = async(req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = async(req: Request, res: Response, _next: NextFunction) => {
     const user = {
         id: req.userId,
         username: req.username
@@ -95,13 +93,13 @@ export const verifyToken = async(req: Request, res: Response, next: NextFunction
 
 export const revokeAccount = async(req: Request, res: Response, next: NextFunction) => {
     const userId = req.userId;
-    let user: IUser | null;
+    let user: IUser | null = null;
 
     try {
         user = await userService.deleteUser(userId);
     } catch (error) {
         logger.error('Error during account revoking, invalid user');
-        throw new HttpError();
+        next(new HttpError());
     }
 
     sendResponse(res, user);
