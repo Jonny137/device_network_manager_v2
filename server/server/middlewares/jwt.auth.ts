@@ -12,7 +12,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     }
     try {
         const token = authorization?.split(' ')[1];
-        const data = verify((<any>token), process.env.JWT_SECRET as string);
+        const data: any = verify((<any>token), process.env.JWT_SECRET as string);
 
         req.userId = data.userId;
         req.username = data.username;

@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IDevice extends Document {
     name: string;
-    date: Date;
     type: string;
     host: string;
     status: string;
@@ -12,7 +11,10 @@ export interface IDevice extends Document {
 const Device: Schema = new Schema({
     name: String,
     type: String,
-    host: String,
+    host: {
+        type: String,
+        required: true
+    },
     status: {
         type: String,
         default: 'Disconnected'

@@ -18,23 +18,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const mongoose_1 = __importStar(require("mongoose"));
-const Device = new mongoose_1.Schema({
-    name: String,
-    type: String,
-    host: {
+const SALT = parseInt(process.env.SALT || '10', 10);
+const UserSchema = new mongoose_1.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
         type: String,
         required: true
-    },
-    status: {
-        type: String,
-        default: 'Disconnected'
-    },
-    disc_time: {
-        type: Number,
-        default: 0
-    },
-    user: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' }
+    }
 }, { timestamps: true });
-exports.default = mongoose_1.default.model('devices', Device);
+UserSchema.pre('save', async function (next) {
+    const self = this;
+    if (!this.isModified('password')) {
+        return next();
+    }
+    try {
+        const salt = await bcrypt_1.default.genSalt(SALT);
+        self.password = await bcrypt_1.default.hash(self.password, salt);
+        return next();
+    }
+    catch (err) {
+        return next();
+    }
+});
+UserSchema.methods.validatePassword = async function (pass) {
+    return await bcrypt_1.default.compare(pass, this.password);
+};
+exports.default = mongoose_1.default.model('users', UserSchema);

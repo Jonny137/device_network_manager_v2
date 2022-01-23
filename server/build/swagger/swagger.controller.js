@@ -6,22 +6,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.swaggerJson = exports.swaggerSpec = void 0;
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swaggerDef = {
-    info: {
-        title: 'Device Network Monitor',
-        description: 'Device network monitor',
-        version: '1.0.0',
-        contact: {
-            name: 'Nikola Stevanovic',
-            email: 'jonnystevanovic@gmail.com'
-        }
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: 'Device Network Monitor',
+            description: 'Application for monitoring of device/server network status.',
+            version: '1.0.0',
+            contact: {
+                name: 'Nikola Stevanovic',
+                email: 'jonnystevanovic@gmail.com'
+            }
+        },
+        servers: [
+            {
+                url: process.env.SWAGGER_BASE
+            },
+        ],
     },
-    apis: ['./build/swagger/*.swagger.js']
+    apis: ['./build/swagger/*.swagger.js'],
 };
-exports.swaggerSpec = swagger_jsdoc_1.default({
-    definition: swaggerDef.info,
-    apis: swaggerDef.apis
-});
-exports.swaggerJson = (req, res) => {
+exports.swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerDef);
+const swaggerJson = (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(exports.swaggerSpec);
 };
+exports.swaggerJson = swaggerJson;

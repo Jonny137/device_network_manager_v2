@@ -6,8 +6,6 @@ const SALT: number = parseInt(process.env.SALT || '10', 10);
 export interface IUser extends Document {
     username: string;
     password: string;
-    token: string | null;
-    tokenExpires: number | null;
     validatePassword(password: string): Promise<boolean>;
 }
 
@@ -20,16 +18,7 @@ const UserSchema = new Schema<IUser>({
     password: {
         type: String,
         required: true
-    },
-    token: {
-        type: String,
-        required: false
-    },
-    tokenExpires: {
-        type: Number,
-        required: false
     }
-    
 }, {timestamps: true});
 
 UserSchema.pre('save', async function (next: HookNextFunction) {

@@ -3,84 +3,72 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addNewDevice = exports.getAllDevices = void 0;
+exports.deleteDevice = exports.updateDeviceInfoForUser = exports.getDeviceByName = exports.addNewDevice = exports.getAllDevicesForUser = void 0;
 const logger_1 = __importDefault(require("../../services/logger"));
 const device_service_1 = __importDefault(require("./device.service"));
-exports.getAllDevices = async (req, res) => {
+const utils_1 = require("../../services/utils");
+const http_error_1 = __importDefault(require("../../services/errors/http.error"));
+const getAllDevicesForUser = async (req, res, next) => {
     try {
-        const devices = await device_service_1.default.getAllDevices();
-        return res.status(200).send({
-            message: devices,
-            status: 'OK'
-        });
+        const userId = req.userId;
+        const devices = await device_service_1.default.getAllDevicesforUser(userId);
+        (0, utils_1.sendResponse)(res, devices);
     }
     catch (error) {
-        logger_1.default.error('Unable to retrieve devices: ', error);
-        return res.send({ error: true, errorObject: error }).status(500);
+        logger_1.default.error('Error during fetching all devices: ', error);
+        next(new http_error_1.default());
     }
 };
-exports.addNewDevice = async (req, res) => {
+exports.getAllDevicesForUser = getAllDevicesForUser;
+const addNewDevice = async (req, res, next) => {
     try {
-        const newDevice = await device_service_1.default.addNewDevice(req.body);
-        return res.status(200).send({
-            message: newDevice,
-            status: 'OK'
-        });
+        let deviceInfo = req.body;
+        deviceInfo['user'] = req.userId;
+        const newDevice = await device_service_1.default.addNewDevice(deviceInfo);
+        (0, utils_1.sendResponse)(res, newDevice);
     }
     catch (error) {
-        return res.send({ error: true, errorObject: error }).status(400);
+        logger_1.default.error('Error during device addition: ', error);
+        next(new http_error_1.default());
     }
 };
-// export const getConferenceById = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const conference: IDevice | null = await deviceService.getConferenceById(
-//       id
-//     );
-//     return res.send(conference).status(200);
-//   } catch (error) {
-//     return res.send({ error: true, errorObject: error }).status(400);
-//   }
-// };
-// export const hasConferenceWithId = async (id: string): Promise<boolean> => {
-//   try {
-//     const conference: IDevice | null = await deviceService.getConferenceByIdLean(
-//       id
-//     );
-//     return !!conference;
-//   } catch (error) {
-//     logger.error('Has Conference with Id error: ', error);
-//     return false;
-//   }
-// };
-// export const createConference = async (req: Request, res: Response) => {
-//   try {
-//     const newConference: IDevice | null = await deviceService.createConference(
-//       req.body
-//     );
-//     res.send(newConference).status(200);
-//   } catch (error) {
-//     return res.send({ error: true, errorObject: error }).status(400);
-//   }
-// };
-// export const updateConference = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const conference: IDevice | null = await deviceService.updateConference(
-//       id,
-//       req.body
-//     );
-//     res.send(conference).status(200);
-//   } catch (error) {
-//     return res.send({ error: true, errorObject: error }).status(400);
-//   }
-// };
-// export const deleteConferenceById = async (req: Request, res: Response) => {
-//   try {
-//     const { id } = req.params;
-//     const deletedConference = await deviceService.deleteConferenceById(id);
-//     res.send(deletedConference).status(200);
-//   } catch (error) {
-//     return res.send({ error: true, errorObject: error }).status(400);
-//   }
-// };
+exports.addNewDevice = addNewDevice;
+const getDeviceByName = async (req, res, next) => {
+    try {
+        const { name } = req.params;
+        const userId = req.userId;
+        const device = await device_service_1.default.getDeviceByName(name, userId);
+        (0, utils_1.sendResponse)(res, device);
+    }
+    catch (error) {
+        logger_1.default.error('Error during fetching device by name: ', error);
+        next(new http_error_1.default());
+    }
+};
+exports.getDeviceByName = getDeviceByName;
+const updateDeviceInfoForUser = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const userId = req.userId;
+        const device = await device_service_1.default.updateDeviceInfoForUser(id, req.body, userId);
+        (0, utils_1.sendResponse)(res, device);
+    }
+    catch (error) {
+        logger_1.default.error('Error during device update: ', error);
+        next(new http_error_1.default());
+    }
+};
+exports.updateDeviceInfoForUser = updateDeviceInfoForUser;
+const deleteDevice = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const userId = req.userId;
+        const deletedDevice = await device_service_1.default.deleteDevice(id, userId);
+        (0, utils_1.sendResponse)(res, deletedDevice);
+    }
+    catch (error) {
+        logger_1.default.error('Error during device deletion: ', error);
+        next(new http_error_1.default());
+    }
+};
+exports.deleteDevice = deleteDevice;
