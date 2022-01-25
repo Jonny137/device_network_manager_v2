@@ -103,7 +103,7 @@
 *              schema:
 *                $ref: '#/components/schemas/User'
 *        '400':
-*          description: Invalid user.
+*          description: Invalid user or the username already exists.
 *          content:
 *            application/json:
 *              schema:

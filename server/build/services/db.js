@@ -8,7 +8,8 @@ const logger_1 = __importDefault(require("./logger"));
 const dbOptions = {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
 };
 mongoose_1.default.connection.on('error', (err) => logger_1.default.error('Mongoose error:', err));
 mongoose_1.default.connection.on('connected', () => logger_1.default.info('Connection to DB established successfully'));

@@ -67,9 +67,14 @@ export const changeUsername = wrapAsync(async (req: Request, res: Response, next
     let newUser: IUser | null = null;
 
     const user: IUser | null = await userService.getUserById(userId);
-
     if (!user) {
-        logger.error('Error during changing username, invalid user', user);
+        logger.error('Error during changing username, invalid user!', user);
+        next(new HttpError(400, 'Invalid user.'));
+    }
+
+    const usernamePresent: IUser | null = await userService.getUserByName(newUsername);
+    if (usernamePresent) {
+        logger.error('Error during changing username, username must be unique!', usernamePresent);
         next(new HttpError(400, 'Invalid user.'));
     }
     
@@ -78,7 +83,6 @@ export const changeUsername = wrapAsync(async (req: Request, res: Response, next
     } catch (error) {
         next(new HttpError());
     }
-    
     sendResponse(res, newUser)
 });
 

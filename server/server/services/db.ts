@@ -4,7 +4,8 @@ import logger from './logger';
 const dbOptions: object = {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
 };
 
 mongoose.connection.on('error', (err: any) =>

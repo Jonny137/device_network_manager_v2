@@ -56,7 +56,12 @@ exports.changeUsername = (0, utils_1.wrapAsync)(async (req, res, next) => {
     let newUser = null;
     const user = await user_service_1.default.getUserById(userId);
     if (!user) {
-        logger_1.default.error('Error during changing username, invalid user', user);
+        logger_1.default.error('Error during changing username, invalid user!', user);
+        next(new http_error_1.default(400, 'Invalid user.'));
+    }
+    const usernamePresent = await user_service_1.default.getUserByName(newUsername);
+    if (!usernamePresent) {
+        logger_1.default.error('Username must be unique!', user);
         next(new http_error_1.default(400, 'Invalid user.'));
     }
     try {
