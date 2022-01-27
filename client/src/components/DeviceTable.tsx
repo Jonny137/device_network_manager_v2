@@ -1,5 +1,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,9 +18,23 @@ import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { editDevice, removeDevice, selectDevices, setDevices } from '../store/reducers/devices';
-import { ACCESS_TOKEN, URL } from '../utils/constants';
+import { 
+	editDevice,
+	removeDevice,
+	selectDevices,
+	setDevices 
+} from '../store/reducers/devices';
+import { 
+	ACCESS_TOKEN,
+	URL,
+	DEVICE_UPDATE_SUCCESS,
+	DEVICE_UPDATE_FAIL,
+	DEVICE_DELETE_FAIL 
+} from '../utils/constants';
 import { Device } from '../store/state.interface';
+import  Notification from './Snackbar';
+
+dayjs.extend(duration);
 
 const DeviceTable: FC = () => {
 	const devices = useAppSelector(selectDevices);
@@ -27,8 +43,10 @@ const DeviceTable: FC = () => {
 	const [ name, setName ] = useState('');
 	const [ type, setType ] = useState('');
 	const [ host, setHost ] = useState('');
+	const [ deviceUpdateOk, setDeviceUpdateOk ] = useState(false);
+	const [ deviceUpdateNok, setDeviceUpdateNok ] = useState(false);
+	const [ deviceDeleteNok, setDeviceDeleteNok ] = useState(false);
 
-	// TODO: move headers to an interceptor
 	const handleDeleteDevice = async (id: string) => {
 		const headers = {
 			Authorization: `Bearer ${ localStorage.getItem(ACCESS_TOKEN) }`,
@@ -39,7 +57,7 @@ const DeviceTable: FC = () => {
 			const device: Device = response.data.message;
 			dispatch(removeDevice(device));
 		} catch (e) {
-			// TODO: show error notification
+			setDeviceDeleteNok(true);
 		}
 	};
 
@@ -69,9 +87,9 @@ const DeviceTable: FC = () => {
 			newDevice.editing = false;
 			resetInputs();
 			dispatch(editDevice(newDevice));
-			// TODO: show success notification
+			setDeviceUpdateOk(true);
 		} catch (e) {
-			// TODO: show error notification
+			setDeviceUpdateNok(true)
 		}
 	};
 
@@ -90,6 +108,9 @@ const DeviceTable: FC = () => {
 
 	return (
 		<TableContainer component={ Paper }>
+			{ deviceUpdateOk && <Notification openState={setDeviceUpdateOk} severity='success' text={ DEVICE_UPDATE_SUCCESS } /> }
+			{ deviceUpdateNok && <Notification openState={setDeviceUpdateNok} severity='error' text={ DEVICE_UPDATE_FAIL } /> }
+			{ deviceDeleteNok && <Notification openState={setDeviceDeleteNok} severity='error' text={ DEVICE_DELETE_FAIL } /> }
 			<Table sx={ { minWidth: 650 } } aria-label="simple table">
 				<TableHead>
 					<TableRow>
@@ -97,7 +118,7 @@ const DeviceTable: FC = () => {
 						<TableCell>Type</TableCell>
 						<TableCell>Host</TableCell>
 						<TableCell>Status</TableCell>
-						<TableCell>Disconnected Time&nbsp;(s)</TableCell>
+						<TableCell>Disconnected Time</TableCell>
 						<TableCell>Actions</TableCell>
 					</TableRow>
 				</TableHead>
@@ -147,7 +168,7 @@ const DeviceTable: FC = () => {
 								}
 							</TableCell>
 							<TableCell>{ device.status }</TableCell>
-							<TableCell>{ device.disc_time }</TableCell>
+							<TableCell>{ dayjs.duration(device.disc_time, 'seconds').format('H[h] m[m] s[s]') }</TableCell>
 							<TableCell>
 								<IconButton
 									disabled={

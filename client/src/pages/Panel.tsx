@@ -17,7 +17,6 @@ const Panel: FC = () => {
 	const dispatch = useAppDispatch();
 
 	useInterval(async () => {
-		console.log('ker')
 		const fetchData = async () => {
 			const headers = {
 				'Authorization': `Bearer ${ localStorage.getItem(ACCESS_TOKEN) }`

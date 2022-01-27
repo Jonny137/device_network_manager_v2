@@ -18,3 +18,11 @@ export const HOME_REF = '/home';
 export const ACCOUNT_REF = '/account';
 
 export const ACCESS_TOKEN = 'access_token';
+
+export const DEVICE_UPDATE_SUCCESS = 'Device updated successfully.';
+export const DEVICE_UPDATE_FAIL = 'Failed to update device.';
+export const DEVICE_DELETE_FAIL = 'Failed to remove device';
+export const DEVICE_ADD_FAIL = 'Failed to add new device.';
+export const USERNAME_UPDATE_SUCCESS = 'New username set.';
+export const USERNAME_UPDATE_FAIL = 'Failed to set new username.';
+export const AUTH_FAILED = 'Unsuccessful authentication.';

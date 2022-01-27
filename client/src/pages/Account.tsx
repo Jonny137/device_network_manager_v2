@@ -9,16 +9,24 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
 import Header from '../components/Header';
-import { ACCESS_TOKEN, CHANGE_USERNAME_ENDPOINT, URL } from '../utils/constants';
+import { 
+	ACCESS_TOKEN,
+	CHANGE_USERNAME_ENDPOINT,
+	URL,
+	USERNAME_UPDATE_SUCCESS,
+	USERNAME_UPDATE_FAIL
+} from '../utils/constants';
 import axios from 'axios';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { selectUser, setUser } from '../store/reducers/user';
+import { useAppDispatch } from '../store/hooks';
+import { setUser } from '../store/reducers/user';
 import { User } from '../store/state.interface';
+import  Notification from '../components/Snackbar';
 
 const Account: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const user = useAppSelector(selectUser);
 	const [ username, setUsername ] = useState('');
+	const [ changeUsernameOk, setChangeUsernameOk ] = useState(false);
+	const [ changeUsernameNok, setChangeUsernameNok ] = useState(false);
 
 	const formRef = createRef<HTMLFormElement>();
 
@@ -30,24 +38,26 @@ const Account: React.FC = () => {
 		};
 
 		try {
-			const response = await axios.patch(`${ URL }${ CHANGE_USERNAME_ENDPOINT }/${ user.id }`, {
+			const response = await axios.patch(`${ URL }${ CHANGE_USERNAME_ENDPOINT }`, {
 				username,
 			}, { headers });
 			const newUser: User = response.data.message;
 			formRef.current!.reset();
 			setUsername('');
 			dispatch(setUser(newUser));
-			// TODO: show success notification
+			setChangeUsernameOk(true);
 		} catch (e) {
-			// TODO: show error notification
+			setChangeUsernameNok(true);
+			console.error(e);
 		}
 	};
 
 	return (
 		<>
 			<Header/>
-
 			<Container component="main" maxWidth="xs">
+				{ changeUsernameOk && <Notification openState={setChangeUsernameOk} severity='success' text={ USERNAME_UPDATE_SUCCESS } /> }
+				{ changeUsernameNok && <Notification openState={setChangeUsernameNok} severity='error' text={ USERNAME_UPDATE_FAIL } /> }
 				<CssBaseline/>
 				<Box
 					sx={ {
