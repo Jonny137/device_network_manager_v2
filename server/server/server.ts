@@ -18,14 +18,12 @@ app.use(cors());
 app.use(express.json());
 
 connectDB();
-
 routes(app);
 
 app.use('/', swaggerRoutes);
 app.use(errorMiddleware);
 
 app.listen(port, () => {
-    // Start device pinging cron
     startCron();
     logger.info(`Server is running on port ${port}`);
 }

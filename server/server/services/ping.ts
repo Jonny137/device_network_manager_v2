@@ -11,5 +11,5 @@ export const pingDevices = async () => {
         } else {
             await deviceService.updateDeviceInfo(device.id, 'Disconnected', device.disc_time + 60);
         }
-    } );
+    });
 }

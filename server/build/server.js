@@ -22,7 +22,6 @@ app.use(express_1.default.json());
 app.use('/', index_1.default);
 app.use(error_middleware_1.default);
 app.listen(port, () => {
-    // Start device pinging cron
     (0, cron_1.startCron)();
     logger_1.default.info(`Server is running on port ${port}`);
 }).on('error', (error) => {
