@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import axios from 'axios';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -11,10 +11,13 @@ import DeviceHeader from '../components/DeviceHeader';
 import Header from '../components/Header';
 import { Device } from '../store/state.interface';
 
+import useInterval from '../hooks/useInterval';
+
 const Panel: FC = () => {
 	const dispatch = useAppDispatch();
 
-	useEffect(() => {
+	useInterval(async () => {
+		console.log('ker')
 		const fetchData = async () => {
 			const headers = {
 				'Authorization': `Bearer ${ localStorage.getItem(ACCESS_TOKEN) }`
@@ -28,7 +31,7 @@ const Panel: FC = () => {
 		};
 
 		fetchData();
-	}, [ dispatch ]);
+	}, 60000, true);
 
 	return (
 		<>
