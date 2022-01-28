@@ -55,5 +55,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-// TODO: default to 404

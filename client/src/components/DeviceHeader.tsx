@@ -91,8 +91,9 @@ const DeviceHeader: FC = () => {
 						/>
 						<Button
 							type="submit"
-							variant="outlined"
+							variant="contained"
 							sx={ { my: 1, mx: 1.5 } }
+							color="primary"
 						>
 							Add
 						</Button>

@@ -40,7 +40,8 @@ const Header: FC = () => {
 					{ user.username }
 				</Typography>
 				<Button
-					variant="outlined"
+					variant="contained"
+					color="primary"
 					sx={ { my: 1, mx: 1.5 } }
 					component={ Link }
 					to={ ACCOUNT_REF }
@@ -48,7 +49,8 @@ const Header: FC = () => {
 					Account
 				</Button>
 				<Button
-					variant="outlined"
+					variant="contained"
+					color="primary"
 					sx={ { my: 1, mx: 1.5 } }
 					onClick={ handleSignOutClick }
 				>

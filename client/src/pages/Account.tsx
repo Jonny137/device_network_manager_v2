@@ -21,6 +21,7 @@ import { useAppDispatch } from '../store/hooks';
 import { setUser } from '../store/reducers/user';
 import { User } from '../store/state.interface';
 import  Notification from '../components/Snackbar';
+import { Typography } from '@mui/material';
 
 const Account: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -67,6 +68,7 @@ const Account: React.FC = () => {
 						alignItems: "center",
 					} }
 				>
+					<Typography variant="h5">Change Username</Typography>
 					<Box component="form" ref={ formRef } noValidate onSubmit={ handleSubmit } sx={ { mt: 3 } }>
 						<Grid container spacing={ 2 }>
 							<Grid item xs={ 12 }>

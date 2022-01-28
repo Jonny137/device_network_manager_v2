@@ -3,9 +3,10 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
+import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -34,7 +35,19 @@ import {
 import { Device } from '../store/state.interface';
 import  Notification from './Snackbar';
 
+import '../styles/Table.css';
+
 dayjs.extend(duration);
+
+const HeaderTableCell = styled(TableCell)(({ theme }) => ({
+	[`&.${tableCellClasses.head}`]: {
+	  backgroundColor: '#2196f3',
+	  color: theme.palette.common.white,
+	},
+	[`&.${tableCellClasses.body}`]: {
+	  fontSize: 16,
+	},
+  }));
 
 const DeviceTable: FC = () => {
 	const devices = useAppSelector(selectDevices);
@@ -107,19 +120,19 @@ const DeviceTable: FC = () => {
 	};
 
 	return (
-		<TableContainer component={ Paper }>
+		<TableContainer component={ Paper } sx={ { maxWidth: 2000 } }>
 			{ deviceUpdateOk && <Notification openState={setDeviceUpdateOk} severity='success' text={ DEVICE_UPDATE_SUCCESS } /> }
 			{ deviceUpdateNok && <Notification openState={setDeviceUpdateNok} severity='error' text={ DEVICE_UPDATE_FAIL } /> }
 			{ deviceDeleteNok && <Notification openState={setDeviceDeleteNok} severity='error' text={ DEVICE_DELETE_FAIL } /> }
-			<Table sx={ { minWidth: 650 } } aria-label="simple table">
+			<Table sx={ { minWidth: 650 } }>
 				<TableHead>
 					<TableRow>
-						<TableCell>Name</TableCell>
-						<TableCell>Type</TableCell>
-						<TableCell>Host</TableCell>
-						<TableCell>Status</TableCell>
-						<TableCell>Disconnected Time</TableCell>
-						<TableCell>Actions</TableCell>
+						<HeaderTableCell>Name</HeaderTableCell>
+						<HeaderTableCell>Type</HeaderTableCell>
+						<HeaderTableCell>Host</HeaderTableCell>
+						<HeaderTableCell>Status</HeaderTableCell>
+						<HeaderTableCell>Disconnected Time</HeaderTableCell>
+						<HeaderTableCell>Actions</HeaderTableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -167,7 +180,11 @@ const DeviceTable: FC = () => {
 										device.host
 								}
 							</TableCell>
-							<TableCell>{ device.status }</TableCell>
+							<TableCell
+								className= { device.status === 'Connected' ? "status-conn" : "status-disc" }
+							>
+								{ device.status }
+							</TableCell>
 							<TableCell>{ dayjs.duration(device.disc_time, 'seconds').format('H[h] m[m] s[s]') }</TableCell>
 							<TableCell>
 								<IconButton
