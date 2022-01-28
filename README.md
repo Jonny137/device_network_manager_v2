@@ -24,6 +24,7 @@ Application for listing and managing remote devices. This is a rewritten version
 ### Backend
 
  - Navigate to directory `server`
+ - Rename `.env-template` to `.env` and fill the parameters values
  - Install the dependencies by running: `npm ci`
  - If you want production mode, run : `npm start`
  - If you want development mode, run: `npm run tsdev`
