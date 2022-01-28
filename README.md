@@ -26,11 +26,11 @@ Application for listing and managing remote devices. This is a rewritten version
  - Navigate to directory `server`
  - Rename `.env-template` to `.env` and fill the parameters values
  - Install the dependencies by running: `npm ci`
- - If you want production mode, run : `npm start`
- - If you want development mode, run: `npm run tsdev`
+ - To run in production mode: `npm start`
+ - To run in development mode: `npm run tsdev`
 
 ### Frontend
 
  - Navigate to directory `client`
  - Install the dependencies by running: `npm ci`
- - To run the application, use: `npm start`
+ - To run the application: `npm start`
